@@ -23,8 +23,18 @@ module.exports = function (files, options, cb) {
     });
 
     if (options.bundleExec) {
-      bin = 'bundle';
       args = ['exec', 'sass', '--check', src];
+      if (options.bundlePath) {
+        var parts = options.bundlePath.split(' ');
+        bin = parts[0];
+        if (parts.length > 1) {
+          parts = parts.slice(1);
+          parts.push('bundle');
+          args = parts.concat(args);
+        }
+      } else {
+        bin = 'bundle';
+      }
     } else {
       bin = 'sass';
       args = ['--check', src];

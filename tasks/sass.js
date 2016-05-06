@@ -42,7 +42,7 @@ module.exports = function (grunt) {
     }
 
     var passedArgs = dargs(options, {
-      excludes: ['bundleExec'],
+      excludes: ['bundleExec', 'bundlePath'],
       ignoreFalse: true
     });
 
@@ -74,8 +74,18 @@ module.exports = function (grunt) {
       var bin = 'sass';
 
       if (options.bundleExec) {
-        bin = 'bundle';
         args.unshift('exec', 'sass');
+        if (options.bundlePath) {
+          var parts = options.bundlePath.split(' ');
+          bin = parts[0];
+          if (parts.length > 1) {
+            parts = parts.slice(1);
+            parts.push('bundle');
+            args = parts.concat(args);
+          }
+        } else {
+          bin = 'bundle';
+        }
       }
 
       // If we're compiling scss or css files
